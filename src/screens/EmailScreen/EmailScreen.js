@@ -13,7 +13,7 @@ import {
 
 export default class EmailScreen extends Component {
   state = {
-    username: '',
+    email: '',
   };
 
   render() {
@@ -51,7 +51,7 @@ export default class EmailScreen extends Component {
               onPress={() =>
                 this.props.navigation.navigate('PasswordScreen', {email})
               }>
-              <Text style={styles.buttonLabel}>Login</Text>
+              <Text style={styles.buttonLabel}>Próximo</Text>
             </TouchableOpacity>
           </View>
         </ScrollView>

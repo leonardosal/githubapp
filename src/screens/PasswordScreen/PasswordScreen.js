@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-
+import base64 from 'base-64';
 import {
   SafeAreaView,
   ScrollView,
@@ -15,6 +15,14 @@ export default class PasswordScreen extends Component {
   state = {
     password: '',
   };
+
+  submitLogin = async () => {
+    const {state, navigate} = this.props.navigation;
+    const {password} = this.state;
+    const token = base64.encode(`${state.params.email}:${password}`);
+    navigate('ReposList', {token});
+  };
+
   render() {
     const {password} = this.state;
     const {state} = this.props.navigation;
@@ -47,7 +55,9 @@ export default class PasswordScreen extends Component {
               style={styles.input}
             />
             <View style={{width: '100%'}}>
-              <TouchableOpacity style={styles.button}>
+              <TouchableOpacity
+                style={styles.button}
+                onPress={this.submitLogin}>
                 <Text style={styles.buttonLabel}>Login</Text>
               </TouchableOpacity>
               <TouchableOpacity
