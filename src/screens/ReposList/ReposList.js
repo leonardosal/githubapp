@@ -8,10 +8,28 @@ import {
   FlatList,
   TouchableOpacity,
 } from 'react-native';
+import {SearchBar} from 'react-native-elements';
 
 export default class ReposList extends Component {
   state = {
     reposList: [],
+    search: '',
+  };
+
+  updateSearch = search => {
+    const {reposList} = this.state;
+    if (!search) this.loadReposList();
+
+    const newRepoList = reposList.filter(item => {
+      const itemData = item.name ? item.name.toUpperCase() : '';
+      const textData = search.toUpperCase();
+      return itemData.indexOf(textData) > -1;
+    });
+
+    this.setState({
+      search,
+      reposList: newRepoList,
+    });
   };
 
   componentDidMount() {
@@ -47,6 +65,7 @@ export default class ReposList extends Component {
       onPress={() =>
         this.props.navigation.navigate('RepoDetails', {
           url: item.url,
+          name: item.name,
           token: this.props.navigation.state.params.token,
         })
       }>
@@ -61,6 +80,20 @@ export default class ReposList extends Component {
     return (
       <SafeAreaView style={styles.safeContainer}>
         <View style={styles.container}>
+          <SearchBar
+            placeholder="Buscar..."
+            inputContainerStyle={{
+              backgroundColor: '#eee',
+            }}
+            lightTheme
+            containerStyle={{
+              backgroundColor: '#FFF',
+              borderBottomWidth: 0,
+              borderTopWidth: 0,
+            }}
+            onChangeText={this.updateSearch}
+            value={this.state.search}
+          />
           <FlatList
             data={this.state.reposList}
             keyExtractor={this._keyExtractor}
@@ -82,12 +115,13 @@ const styles = StyleSheet.create({
     backgroundColor: '#FFF',
   },
   list: {
-    padding: 16,
+    paddingHorizontal: 16,
   },
   listItem: {
     height: 100,
     borderWidth: 1,
     borderColor: '#ccc',
+    borderRadius: 4,
     padding: 8,
     marginBottom: 16,
   },

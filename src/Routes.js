@@ -1,3 +1,5 @@
+import React from 'react';
+import {Image} from 'react-native';
 import {createAppContainer, createSwitchNavigator} from 'react-navigation';
 import {createStackNavigator} from 'react-navigation-stack';
 
@@ -21,14 +23,37 @@ const AuthStack = createStackNavigator({
   },
 });
 
-const AppStack = createStackNavigator({
-  ReposList: {
-    screen: ReposList,
+const AppStack = createStackNavigator(
+  {
+    ReposList: {
+      screen: ReposList,
+      navigationOptions: {
+        headerTitle: (
+          <Image source={require('./assets/icons/github-brand.png')} />
+        ),
+        headerStyle: {
+          elevation: 0,
+          shadowOpacity: 0,
+          borderBottomWidth: 0,
+        },
+      },
+    },
+    RepoDetails: {
+      screen: RepoDetails,
+      navigationOptions: ({navigation}) => ({
+        title: navigation.state.params.name,
+        headerStyle: {
+          elevation: 0,
+          shadowOpacity: 0,
+          borderBottomWidth: 0,
+        },
+      }),
+    },
   },
-  RepoDetails: {
-    screen: RepoDetails,
+  {
+    headerLayoutPreset: 'center',
   },
-});
+);
 
 const AppContainer = createAppContainer(
   createSwitchNavigator(

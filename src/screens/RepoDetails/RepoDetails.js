@@ -90,7 +90,7 @@ const styles = StyleSheet.create({
     backgroundColor: '#FFF',
   },
   list: {
-    padding: 16,
+    paddingHorizontal: 16,
   },
   listItem: {
     height: 100,
@@ -99,6 +99,7 @@ const styles = StyleSheet.create({
     padding: 8,
     marginBottom: 16,
     width: '80%',
+    borderRadius: 4,
   },
   itemTitle: {
     fontSize: 16,

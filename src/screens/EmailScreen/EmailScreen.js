@@ -28,7 +28,6 @@ export default class EmailScreen extends Component {
               style={styles.logo}
               source={require('../../assets/icons/github-logo.png')}
             />
-            <Text style={styles.headerLabel}>Bem vindo ao Github App!</Text>
           </View>
 
           <View style={styles.containerForm}>
@@ -73,6 +72,7 @@ const styles = StyleSheet.create({
   containerForm: {
     flex: 1,
     paddingHorizontal: 32,
+    paddingBottom: 32,
     justifyContent: 'space-between',
     alignItems: 'center',
   },
@@ -100,8 +100,5 @@ const styles = StyleSheet.create({
   buttonLabel: {
     fontSize: 16,
     color: '#FFF',
-  },
-  headerLabel: {
-    fontSize: 18,
   },
 });
