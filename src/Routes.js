@@ -8,6 +8,12 @@ import PasswordScreen from './screens/PasswordScreen';
 import ReposList from './screens/ReposList';
 import RepoDetails from './screens/RepoDetails';
 
+const headerStyle = {
+  elevation: 0,
+  shadowOpacity: 0,
+  borderBottomWidth: 0,
+};
+
 const AuthStack = createStackNavigator({
   EmailScreen: {
     screen: EmailScreen,
@@ -31,22 +37,14 @@ const AppStack = createStackNavigator(
         headerTitle: (
           <Image source={require('./assets/icons/github-brand.png')} />
         ),
-        headerStyle: {
-          elevation: 0,
-          shadowOpacity: 0,
-          borderBottomWidth: 0,
-        },
+        headerStyle,
       },
     },
     RepoDetails: {
       screen: RepoDetails,
       navigationOptions: ({navigation}) => ({
         title: navigation.state.params.name,
-        headerStyle: {
-          elevation: 0,
-          shadowOpacity: 0,
-          borderBottomWidth: 0,
-        },
+        headerStyle,
       }),
     },
   },

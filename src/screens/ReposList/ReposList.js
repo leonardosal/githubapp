@@ -2,7 +2,6 @@ import React, {Component} from 'react';
 
 import {
   SafeAreaView,
-  StyleSheet,
   Text,
   View,
   FlatList,
@@ -10,71 +9,85 @@ import {
 } from 'react-native';
 import {SearchBar} from 'react-native-elements';
 
+import {loadReposList} from './api';
+import styles from './styles';
+
 export default class ReposList extends Component {
   state = {
     reposList: [],
+    reposListOriginal: [],
     search: '',
   };
 
   updateSearch = search => {
-    const {reposList} = this.state;
-    if (!search) this.loadReposList();
+    const {reposList, reposListOriginal} = this.state;
 
-    const newRepoList = reposList.filter(item => {
+    if (search) {
+      const newRepoList = this.filterList(reposList, search);
+      this.setState({
+        search,
+        reposList: newRepoList,
+      });
+      return;
+    }
+
+    this.setState({
+      search,
+      reposList: reposListOriginal,
+    });
+  };
+
+  filterList = (reposList, search) => {
+    return reposList.filter(item => {
       const itemData = item.name ? item.name.toUpperCase() : '';
       const textData = search.toUpperCase();
       return itemData.indexOf(textData) > -1;
     });
+  };
 
+  clearSearch = () => {
     this.setState({
-      search,
-      reposList: newRepoList,
+      search: '',
     });
   };
 
-  componentDidMount() {
-    this.loadReposList();
-  }
-
-  loadReposList = async () => {
-    const {token} = this.props.navigation.state.params;
+  async componentDidMount() {
     try {
-      const resp = await fetch('https://api.github.com/user/repos', {
-        method: 'GET',
-        headers: {
-          Authorization: `basic ${token}`,
-        },
-      });
-      const respJson = await resp.json();
+      const {token} = this.props.navigation.state.params;
+      const reposList = await loadReposList(token);
       this.setState({
-        reposList: respJson,
+        reposList,
+        reposListOriginal: reposList,
       });
     } catch (err) {
-      alert(
+      Alert.alert(
+        'Erro',
         'Erro ao executar a requisição, por favor tente novamente mais tarde',
       );
     }
-  };
+  }
 
   _keyExtractor = item => String(item.id);
 
-  renderItem = ({item}) => (
-    <TouchableOpacity
-      key={item.id}
-      style={styles.listItem}
-      onPress={() =>
-        this.props.navigation.navigate('RepoDetails', {
-          url: item.url,
-          name: item.name,
-          token: this.props.navigation.state.params.token,
-        })
-      }>
-      <Text style={styles.itemTitle}>{item.name}</Text>
-      <Text style={styles.itemDescription}>
-        {item.description ? item.description : 'Sem descrição'}
-      </Text>
-    </TouchableOpacity>
-  );
+  renderItem = ({item}) => {
+    const {navigate, state} = this.props.navigation;
+    const props = {
+      url: item.url,
+      name: item.name,
+      token: state.params.token,
+    };
+    return (
+      <TouchableOpacity
+        key={item.id}
+        style={styles.listItem}
+        onPress={() => navigate('RepoDetails', props)}>
+        <Text style={styles.itemTitle}>{item.name}</Text>
+        <Text style={styles.itemDescription}>
+          {item.description ? item.description : 'Sem descrição'}
+        </Text>
+      </TouchableOpacity>
+    );
+  };
 
   render() {
     return (
@@ -82,16 +95,11 @@ export default class ReposList extends Component {
         <View style={styles.container}>
           <SearchBar
             placeholder="Buscar..."
-            inputContainerStyle={{
-              backgroundColor: '#eee',
-            }}
+            inputContainerStyle={styles.searchInput}
             lightTheme
-            containerStyle={{
-              backgroundColor: '#FFF',
-              borderBottomWidth: 0,
-              borderTopWidth: 0,
-            }}
+            containerStyle={styles.searchContainer}
             onChangeText={this.updateSearch}
+            onClear={this.clearSearch}
             value={this.state.search}
           />
           <FlatList
@@ -105,31 +113,3 @@ export default class ReposList extends Component {
     );
   }
 }
-
-const styles = StyleSheet.create({
-  safeContainer: {
-    flex: 1,
-  },
-  container: {
-    flex: 1,
-    backgroundColor: '#FFF',
-  },
-  list: {
-    paddingHorizontal: 16,
-  },
-  listItem: {
-    height: 100,
-    borderWidth: 1,
-    borderColor: '#ccc',
-    borderRadius: 4,
-    padding: 8,
-    marginBottom: 16,
-  },
-  itemTitle: {
-    fontSize: 18,
-    fontWeight: '500',
-  },
-  itemDescription: {
-    paddingVertical: 32,
-  },
-});

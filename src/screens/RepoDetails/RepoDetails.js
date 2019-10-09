@@ -1,62 +1,41 @@
 import React, {Component} from 'react';
 
-import {
-  SafeAreaView,
-  StyleSheet,
-  Text,
-  View,
-  FlatList,
-  Image,
-} from 'react-native';
+import {SafeAreaView, Text, View, FlatList, Image, Alert} from 'react-native';
+
+import styles from './styles';
+import {loadCommitsList} from './api';
 
 export default class RepoDetails extends Component {
   state = {
     commitsList: [],
   };
 
-  componentDidMount() {
-    this.loadReposList();
-  }
-
-  loadReposList = async () => {
-    const {url, token} = this.props.navigation.state.params;
+  async componentDidMount() {
     try {
-      const resp = await fetch(`${url}/commits`, {
-        method: 'GET',
-        headers: {
-          Authorization: `basic ${token}`,
-        },
-      });
-      const respJson = await resp.json();
+      const {url, token} = this.props.navigation.state.params;
+      const commitsList = await loadCommitsList(url, token);
       this.setState({
-        commitsList: respJson,
+        commitsList,
       });
     } catch (err) {
-      alert(
+      Alert.alert(
+        'Erro',
         'Erro ao executar a requisição, por favor tente novamente mais tarde',
       );
     }
-  };
+  }
 
   _keyExtractor = item => String(item.sha);
 
   renderItem = ({item}) => {
-    const avatar = item && item.author && item.author.avatar_url;
+    const avatarUrl = item && item.author && item.author.avatar_url;
+    const source = avatarUrl
+      ? {uri: avatarUrl}
+      : require('../../assets/icons/NotFoundAvatar.png');
     return (
-      <View style={{flexDirection: 'row', alignItems: 'center'}}>
-        <View style={{paddingRight: 16}}>
-          <Image
-            style={{
-              width: 50,
-              height: 50,
-              borderRadius: 32,
-            }}
-            source={{
-              uri: avatar
-                ? avatar
-                : 'https://encrypted-tbn0.gstatic.com/images?q=tbn%3AANd9GcTtGNsPFQjrulPWM3CsyM8XAIE-zTdOAX3CxtW8LpYYzfBdcKBB',
-            }}
-          />
+      <View style={styles.itemContainer}>
+        <View style={styles.avatarContainer}>
+          <Image style={styles.avatar} source={source} />
         </View>
         <View key={item.id} style={styles.listItem}>
           <Text style={styles.itemTitle}>{item.commit.message}</Text>
@@ -80,29 +59,3 @@ export default class RepoDetails extends Component {
     );
   }
 }
-
-const styles = StyleSheet.create({
-  safeContainer: {
-    flex: 1,
-  },
-  container: {
-    flex: 1,
-    backgroundColor: '#FFF',
-  },
-  list: {
-    paddingHorizontal: 16,
-  },
-  listItem: {
-    height: 100,
-    borderWidth: 1,
-    borderColor: '#ccc',
-    padding: 8,
-    marginBottom: 16,
-    width: '80%',
-    borderRadius: 4,
-  },
-  itemTitle: {
-    fontSize: 16,
-    fontWeight: '500',
-  },
-});
