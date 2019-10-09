@@ -1,17 +1,10 @@
 import React, {Component} from 'react';
 
-import {
-  SafeAreaView,
-  ScrollView,
-  View,
-  Image,
-  TextInput,
-  TouchableOpacity,
-  Text,
-  Alert,
-} from 'react-native';
+import {SafeAreaView, ScrollView, View, Image, Alert} from 'react-native';
 
 import styles from './styles';
+import Button from '../../components/Button';
+import Input from '../../components/Input';
 
 export default class EmailScreen extends Component {
   state = {
@@ -45,23 +38,17 @@ export default class EmailScreen extends Component {
           </View>
 
           <View style={styles.containerForm}>
-            <TextInput
+            <Input
               value={email}
-              autoCapitalize="none"
-              autoCorrect={false}
-              autoCompleteType="off"
-              keyboardType="email-address"
               placeholder="Digite seu email do github"
+              keyboardType="email-address"
               onChangeText={email =>
                 this.setState({
                   email,
                 })
               }
-              style={styles.input}
             />
-            <TouchableOpacity style={styles.button} onPress={this.submit}>
-              <Text style={styles.buttonLabel}>Próximo</Text>
-            </TouchableOpacity>
+            <Button onPress={this.submit} label="Próximo" />
           </View>
         </ScrollView>
       </SafeAreaView>

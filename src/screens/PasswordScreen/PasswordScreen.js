@@ -1,20 +1,11 @@
 import React, {Component} from 'react';
-import {
-  SafeAreaView,
-  ScrollView,
-  View,
-  Image,
-  TextInput,
-  TouchableOpacity,
-  Text,
-  Alert,
-} from 'react-native';
+import {SafeAreaView, ScrollView, View, Image, Text, Alert} from 'react-native';
 
 import {createToken} from '../../utils';
-
 import styles from './styles';
-
 import {login} from './api.js';
+import Button from '../../components/Button';
+import Input from '../../components/Input';
 
 export default class PasswordScreen extends Component {
   state = {
@@ -62,31 +53,22 @@ export default class PasswordScreen extends Component {
           </View>
 
           <View style={styles.containerForm}>
-            <TextInput
+            <Input
               value={password}
-              autoCapitalize="none"
-              autoCorrect={false}
-              autoCompleteType="off"
-              secureTextEntry={true}
+              secureTextEntry
               placeholder="Digite sua senha do github"
               onChangeText={password =>
                 this.setState({
                   password,
                 })
               }
-              style={styles.input}
             />
             <View style={styles.buttonsContainer}>
-              <TouchableOpacity
-                style={styles.button}
-                onPress={this.submitLogin}>
-                <Text style={styles.buttonLabel}>Login</Text>
-              </TouchableOpacity>
-              <TouchableOpacity
-                style={styles.button}
-                onPress={() => this.props.navigation.goBack()}>
-                <Text style={styles.buttonLabel}>Voltar</Text>
-              </TouchableOpacity>
+              <Button onPress={this.submitLogin} label="Login" />
+              <Button
+                onPress={() => this.props.navigation.goBack()}
+                label="Voltar"
+              />
             </View>
           </View>
         </ScrollView>

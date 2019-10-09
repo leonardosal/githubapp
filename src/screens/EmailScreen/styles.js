@@ -25,26 +25,6 @@ const styles = StyleSheet.create({
     height: 128,
     marginBottom: 32,
   },
-  input: {
-    borderWidth: 1,
-    borderColor: '#ccc',
-    height: 50,
-    width: '100%',
-    fontSize: 18,
-    paddingLeft: 8,
-  },
-  button: {
-    height: 50,
-    width: '100%',
-    alignItems: 'center',
-    justifyContent: 'center',
-    backgroundColor: '#7159c1',
-    borderRadius: 2,
-  },
-  buttonLabel: {
-    fontSize: 16,
-    color: '#FFF',
-  },
 });
 
 export default styles;

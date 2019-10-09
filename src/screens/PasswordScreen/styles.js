@@ -35,19 +35,6 @@ const styles = StyleSheet.create({
   buttonsContainer: {
     width: '100%',
   },
-  button: {
-    height: 50,
-    width: '100%',
-    alignItems: 'center',
-    justifyContent: 'center',
-    backgroundColor: '#7159c1',
-    borderRadius: 2,
-    marginBottom: 8,
-  },
-  buttonLabel: {
-    fontSize: 16,
-    color: '#FFF',
-  },
   headerLabel: {
     fontSize: 18,
   },
