@@ -1,5 +1,9 @@
 ## Github App
 
+ IOS                       | Android 
+:-------------------------:|:-------------------------:
+![](gifs/ios.gif)          | ![](gifs/android.gif)
+
 ## Requisitos para instalação local
 
 - NodeJS versão 8.x ou superior
